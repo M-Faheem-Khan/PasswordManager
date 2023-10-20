@@ -9,40 +9,41 @@ import java.util.Arrays;
 import java.util.Base64;
 
 public class AES {
-    private static SecretKeySpec SecretKey;
+  private static SecretKeySpec SecretKey;
 
-    public AES(String masterPassword) {
-        MessageDigest sha;
-        try {
-            byte[] key = masterPassword.getBytes(StandardCharsets.UTF_8);
-            sha = MessageDigest.getInstance("SHA-1");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16);
-            SecretKey = new SecretKeySpec(key, "AES");
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println(e.getMessage());
-        }
+  public AES(String masterPassword) {
+    MessageDigest sha;
+    try {
+      byte[] key = masterPassword.getBytes(StandardCharsets.UTF_8);
+      sha = MessageDigest.getInstance("SHA-1");
+      key = sha.digest(key);
+      key = Arrays.copyOf(key, 16);
+      SecretKey = new SecretKeySpec(key, "AES");
+    } catch (NoSuchAlgorithmException e) {
+      System.out.println(e.getMessage());
     }
+  }
 
-    public String encrypt(String password) {
-        try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, SecretKey);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(password.getBytes(StandardCharsets.UTF_8)));
-        } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e);
-        }
-        return null;
+  public String encrypt(String password) {
+    try {
+      Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+      cipher.init(Cipher.ENCRYPT_MODE, SecretKey);
+      return Base64.getEncoder()
+          .encodeToString(cipher.doFinal(password.getBytes(StandardCharsets.UTF_8)));
+    } catch (Exception e) {
+      System.out.println("Error while encrypting: " + e);
     }
+    return null;
+  }
 
-    public String decrypt(String encryptedPassword) {
-        try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, SecretKey);
-            return new String(cipher.doFinal(Base64.getDecoder().decode(encryptedPassword)));
-        } catch (Exception e) {
-            System.out.println("Error while decrypting: " + e);
-        }
-        return null;
+  public String decrypt(String encryptedPassword) {
+    try {
+      Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+      cipher.init(Cipher.DECRYPT_MODE, SecretKey);
+      return new String(cipher.doFinal(Base64.getDecoder().decode(encryptedPassword)));
+    } catch (Exception e) {
+      System.out.println("Error while decrypting: " + e);
     }
+    return null;
+  }
 }

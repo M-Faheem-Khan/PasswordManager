@@ -4,71 +4,40 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class PasswordManager {
-    private final AES aes;
-    public final Map<String, String> PasswordVault = new Hashtable<>();
-    public PasswordManager(String vaultMasterPassword) {
-        aes = new AES(vaultMasterPassword);
-    }
+  private final AES aes;
+  public final Map<String, String> PasswordVault = new Hashtable<>();
 
-    public void addPasswordToVault(String name, String password) {
-        PasswordVault.put(name, aes.encrypt(password));
-    }
+  public PasswordManager(String vaultMasterPassword) {
+    aes = new AES(vaultMasterPassword);
+  }
 
-    public String getPasswordFromVault(String name) {
-        String encryptedPassword = PasswordVault.get(name);
-        if (encryptedPassword == null) {
-            return null;
-        }
-        return aes.decrypt(encryptedPassword);
-    }
+  public void addPasswordToVault(String name, String password) {
+    PasswordVault.put(name, aes.encrypt(password));
+  }
 
-    public void removePasswordFromVault(String name) {
-        PasswordVault.remove(name);
+  public String getPasswordFromVault(String name) {
+    String encryptedPassword = PasswordVault.get(name);
+    if (encryptedPassword == null) {
+      return null;
     }
+    return aes.decrypt(encryptedPassword);
+  }
 
-    public int passwordsInVault() {
-        return PasswordVault.size();
-    }
+  public void removePasswordFromVault(String name) {
+    PasswordVault.remove(name);
+  }
 
-    public Map<String, String> getAllPasswordsFromVault() {
-        Map<String, String> decryptedPasswords = new Hashtable<>();
-        for (String key : PasswordVault.keySet()) {
-            decryptedPasswords.put(key, getPasswordFromVault(key));
-        }
-        return decryptedPasswords;
+  public int passwordsInVault() {
+    return PasswordVault.size();
+  }
+
+  public Map<String, String> getAllPasswordsFromVault() {
+    Map<String, String> decryptedPasswords = new Hashtable<>();
+    for (String key : PasswordVault.keySet()) {
+      decryptedPasswords.put(key, getPasswordFromVault(key));
     }
+    return decryptedPasswords;
+  }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//EOF
+// EOF
